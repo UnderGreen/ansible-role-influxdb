@@ -1,0 +1,40 @@
+---
+- name: influxdb - download sources
+  get_url: url=http://s3.amazonaws.com/influxdb/influxdb_latest_amd64.deb dest=/var/tmp/influxdb_latest_amd64.deb
+  register: download_influxdb_result
+
+- name: influxdb - install
+  apt: deb=/var/tmp/influxdb_latest_amd64.deb
+  when: download_influxdb_result|changed
+
+- name: change influxdb config
+  template:
+    src: config.toml.j2
+    dest: /opt/influxdb/versions/0.8.8/config.toml
+    owner: influxdb
+    group: influxdb
+  notify: restart influxdb
+
+- name: influxdb - ensure service is enable
+  service: name=influxdb enabled=yes state=started
+
+- name: influxdb - wait for service
+  wait_for: port={{ influxdb_port }} delay=5
+
+- name: influxdb - deploy shards_default.json.j2
+  template: src=shards_default.json.j2 dest=/tmp/
+
+- name: influxdb - create project database
+  shell: curl -X POST "http://{{ influxdb_host }}:{{ influxdb_port }}/cluster/database_configs/{{ influxdb_database }}?u=root&p=root" --data-binary @/tmp/shards_default.json.j2
+
+- name: influxdb - create grafana database
+  shell: "curl -X POST 'http://{{ influxdb_host }}:{{ influxdb_port }}/cluster/database_configs/grafana?u=root&p=root' -d '{\"name\": \"grafana\"}'"
+
+- name: influxdb - create project user
+  shell: "curl -X POST 'http://{{ influxdb_host }}:{{ influxdb_port }}/db/{{ influxdb_database }}/users?u=root&p=root' -d '{\"name\": \"{{ influxdb_user }}\", \"password\": \"{{ influxdb_password }}\"}'"
+
+- name: influxdb - create grafana user
+  shell: "curl -X POST 'http://{{ influxdb_host }}:{{ influxdb_port }}/db/grafana/users?u=root&p=root' -d '{\"name\": \"grafana\", \"password\": \"{{ influxdb_grafana_password }}\"}'"
+
+- name: influxdb - change root pw
+  shell: "curl -X POST 'http://{{ influxdb_host }}:{{ influxdb_port }}/cluster_admins/root?u=root&p=root' -d '{\"password\": \"{{ influxdb_root_password }}\"}'"

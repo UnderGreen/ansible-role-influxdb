@@ -1,0 +1,7 @@
+---
+
+influxdb_bind_address: "0.0.0.0"
+influxdb_host: "{{ influxdb_bind_address }}"
+influxdb_port: 8086
+influxdb_user: "default_user"
+influxdb_password: "passw0rd"
