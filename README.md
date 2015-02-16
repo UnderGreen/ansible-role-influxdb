@@ -41,6 +41,6 @@ GPLv2
 Author Information
 ------------------
 
-Sergei Antipov, 2GIS LLC
-[github page](https://github.com/UnderGreen)
+Sergei Antipov, 2GIS LLC  
+[github page](https://github.com/UnderGreen)  
 [LinkedIn profile](https://www.linkedin.com/profile/view?id=396228287)
