@@ -1,5 +1,5 @@
 ---
-
+# defaults file for influxdb
 influxdb_bind_address: "0.0.0.0"
 influxdb_host: "{{ influxdb_bind_address }}"
 influxdb_port: 8086

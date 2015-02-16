@@ -1,4 +1,5 @@
 ---
+# handlers file for influxdb-src
 
 - name: restart influxdb
   service: name=influxdb state=restarted

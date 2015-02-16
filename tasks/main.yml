@@ -1,4 +1,6 @@
 ---
+# tasks file for influxdb
+
 - name: influxdb - download sources
   get_url: url=http://s3.amazonaws.com/influxdb/influxdb_latest_amd64.deb dest=/var/tmp/influxdb_latest_amd64.deb
   register: download_influxdb_result
