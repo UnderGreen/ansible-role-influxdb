@@ -17,7 +17,7 @@
     group: influxdb
   notify: restart influxdb
 
-- name: influxdb - ensure service is enable
+- name: influxdb - ensure service is enabled and started
   service: name=influxdb enabled=yes state=started
 
 - name: influxdb - wait for service
