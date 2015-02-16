@@ -31,7 +31,7 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: influxdb-server
       roles:
-         - { role: undergreen.influxdb, tags: ['influxdb'] }
+         - { role: greendayonfire.influxdb, tags: ['influxdb'] }
 
 License
 -------
